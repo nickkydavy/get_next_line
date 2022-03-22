@@ -6,7 +6,7 @@
 /*   By: pnimwata <pnimwata@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/06 21:09:45 by pnimwata          #+#    #+#             */
-/*   Updated: 2022/03/22 15:40:59 by pnimwata         ###   ########.fr       */
+/*   Updated: 2022/03/22 16:53:57 by pnimwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*blank_str(size_t num)
 	return (str);
 }
 
-size_t	where_is_nl(buffer)
+size_t	where_is_nl(char const *buffer)
 {
 	size_t	size;
 	
@@ -30,11 +30,35 @@ size_t	where_is_nl(buffer)
 	return (size);
 }
 
+char	*get_line(char *temp, char *buffer, size_t size)
+{
+	char	*str;
+	size_t	len;
+	
+	len = 0;
+	str = (char *)ft_calloc(size, sizeof (char));
+	while (*temp)
+	{
+		*(str + len) = *temp;
+		temp++;
+		len++;
+	}
+	while (len < size && *buffer)
+	{
+		*(str + len) = *buffer;
+		buffer++;
+		len++;
+	}
+	*(str + len) = 0;
+	return (str);
+}
+
 char	*get_next_line(int fd)
 {
 	static size_t	count;
 	char		*temp;
-	char		buffer[BUFFER_SIZE + 1];
+	static char		buffer[BUFFER_SIZE + 1];
+	size_t		size;
 	size_t		i;
 	
 	if (fd < 0 || BUFFER_SIZE < 1)
@@ -47,14 +71,17 @@ char	*get_next_line(int fd)
 		i++;
 	}
 	temp = blank_str(1);
+	size = 0;
+	printf("passthis");
 	while (read(fd, buffer, BUFFER_SIZE) > 0)
 	{
 		buffer[BUFFER_SIZE] = '\0';
-		count += where_is_nl(buffer);
-		
-		temp = ft_strjoin(temp, buffer);
-		printf("%d", (int)ft_strchr(buffer, '\n'));
-		if (ft_strchr(buffer, '\n'))
+		size = where_is_nl(buffer);
+		// temp = ft_strjoin(temp, buffer);
+		temp = get_line(temp, buffer, size);
+		count += size;
+		// printf("%d", (int)ft_strchr(buffer, '\n'));
+		if (size != ft_strlen(buffer))
 		{
 			printf("passthis");
 			break ;

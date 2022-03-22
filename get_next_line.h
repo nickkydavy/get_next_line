@@ -6,7 +6,7 @@
 /*   By: pnimwata <pnimwata@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/06 21:10:08 by pnimwata          #+#    #+#             */
-/*   Updated: 2022/03/22 13:36:48 by pnimwata         ###   ########.fr       */
+/*   Updated: 2022/03/22 16:08:40 by pnimwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 
 
 char	*get_next_line(int fd);
-char	ft_strchr(char const *s, int c);
+char	*ft_strchr(char const *s, int c);
 char	*blank_str(size_t num);
 char	*ft_strjoin(char const *str1, char const *str2);
 void	*ft_calloc(size_t count, size_t size);
