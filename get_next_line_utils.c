@@ -6,38 +6,45 @@
 /*   By: pnimwata <pnimwata@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/06 21:10:46 by pnimwata          #+#    #+#             */
-/*   Updated: 2022/03/06 21:10:46 by pnimwata         ###   ########.fr       */
+/*   Updated: 2022/03/21 16:19:08 by pnimwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_strnew(int num)
+char	*ft_strnew(size_t num)
 {
 	char	*str;
 	
-	str = (char *)malloc(num * sizeof (char));
+	str = (char *)ft_calloc(num + 1, sizeof (char));
 	if (!str)
 		return (0);
-	str = ft_memset(str, 0, num * 1);
 	return (str);
 }
 
-void	*ft_memset(void *s, int c, size_t size)
+void	*ft_calloc(size_t count, size_t size)
 {
-	char			*str;
-	unsigned int	i;
-	
-	if (!s)
+	void	*mem;
+
+	mem = malloc(count * size);
+	if (!mem)
 		return (0);
+	ft_bzero(mem, count * size);
+	return (mem);
+}
+
+void	ft_bzero(void *s, size_t size)
+{
+	char	*str;
+	size_t	i;
+	
 	i = 0;
 	str = (char *)s;
 	while (i < size)
 	{
-		*(str + i) = c;
+		*(str + i) = 0;
 		i++;
 	}
-	return (s);
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)
@@ -48,7 +55,9 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	size_t	size;
 
 	size = ft_strlen(s1) + ft_strlen(s2);
-	new_s = (char *)malloc ((size + 1) * sizeof (char));
+	new_s = (char *)ft_calloc (size + 1, sizeof (char));
+	if (!new_s)
+		return (0);
 	i = 0;
 	j = 0;
 	while (*(s1 + j) != '\0')
@@ -73,7 +82,7 @@ size_t	ft_strlen(char const *str)
 	size_t	count;
 	
 	count = 0;
-	while (str)
+	while (*str)
 	{
 		count++;
 		str++;
