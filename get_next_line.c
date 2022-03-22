@@ -6,7 +6,7 @@
 /*   By: pnimwata <pnimwata@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/06 21:09:45 by pnimwata          #+#    #+#             */
-/*   Updated: 2022/03/22 13:37:53 by pnimwata         ###   ########.fr       */
+/*   Updated: 2022/03/22 15:40:59 by pnimwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,14 @@ char	*blank_str(size_t num)
 	if (!str)
 		return (0);
 	return (str);
+}
+
+size_t	where_is_nl(buffer)
+{
+	size_t	size;
+	
+	size = ft_strlen(buffer) - ft_strlen(ft_strchr(buffer, '\n'));
+	return (size);
 }
 
 char	*get_next_line(int fd)
@@ -42,11 +50,15 @@ char	*get_next_line(int fd)
 	while (read(fd, buffer, BUFFER_SIZE) > 0)
 	{
 		buffer[BUFFER_SIZE] = '\0';
+		count += where_is_nl(buffer);
+		
 		temp = ft_strjoin(temp, buffer);
-		count++;
-		printf("%c", ft_strchr(buffer, '\n'));
+		printf("%d", (int)ft_strchr(buffer, '\n'));
 		if (ft_strchr(buffer, '\n'))
+		{
+			printf("passthis");
 			break ;
+		}
 	}
 	if (!temp[0])
 		return (0);

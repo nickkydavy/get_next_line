@@ -6,13 +6,13 @@
 /*   By: pnimwata <pnimwata@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/06 21:10:46 by pnimwata          #+#    #+#             */
-/*   Updated: 2022/03/22 14:18:38 by pnimwata         ###   ########.fr       */
+/*   Updated: 2022/03/22 14:59:05 by pnimwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	ft_strchr(char const *s, int c)
+char	*ft_strchr(char const *s, int c)
 {
 	size_t	i;
 	
@@ -20,7 +20,8 @@ char	ft_strchr(char const *s, int c)
 	while (*(s + i) != 0)
 	{
 		if (*(s + i) == (char)c)
-			return ((char)*(s + i));
+			return ((char *)(s + i));
+		i++;
 	}
 	return (0);
 }
