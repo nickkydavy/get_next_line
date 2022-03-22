@@ -6,20 +6,23 @@
 /*   By: pnimwata <pnimwata@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/06 21:10:46 by pnimwata          #+#    #+#             */
-/*   Updated: 2022/03/21 16:19:08 by pnimwata         ###   ########.fr       */
+/*   Updated: 2022/03/22 14:18:38 by pnimwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_strnew(size_t num)
+char	ft_strchr(char const *s, int c)
 {
-	char	*str;
+	size_t	i;
 	
-	str = (char *)ft_calloc(num + 1, sizeof (char));
-	if (!str)
-		return (0);
-	return (str);
+	i = 0;
+	while (*(s + i) != 0)
+	{
+		if (*(s + i) == (char)c)
+			return ((char)*(s + i));
+	}
+	return (0);
 }
 
 void	*ft_calloc(size_t count, size_t size)

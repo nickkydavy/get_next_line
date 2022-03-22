@@ -6,11 +6,21 @@
 /*   By: pnimwata <pnimwata@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/06 21:09:45 by pnimwata          #+#    #+#             */
-/*   Updated: 2022/03/21 18:04:13 by pnimwata         ###   ########.fr       */
+/*   Updated: 2022/03/22 13:37:53 by pnimwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+char	*blank_str(size_t num)
+{
+	char	*str;
+	
+	str = (char *)ft_calloc(num + 1, sizeof (char));
+	if (!str)
+		return (0);
+	return (str);
+}
 
 char	*get_next_line(int fd)
 {
@@ -28,19 +38,17 @@ char	*get_next_line(int fd)
 		read(fd, buffer, BUFFER_SIZE);
 		i++;
 	}
-	temp = ft_strnew(1);
+	temp = blank_str(1);
 	while (read(fd, buffer, BUFFER_SIZE) > 0)
 	{
-		printf("%zu ", count);
 		buffer[BUFFER_SIZE] = '\0';
 		temp = ft_strjoin(temp, buffer);
 		count++;
-		if (buffer[0] == '\n')
+		printf("%c", ft_strchr(buffer, '\n'));
+		if (ft_strchr(buffer, '\n'))
 			break ;
 	}
-	printf("%d", (int)temp[0]);
-	if (!temp)
+	if (!temp[0])
 		return (0);
-	//printf("%s", str);
 	return (temp);
 }
