@@ -12,8 +12,15 @@
 
 #ifndef GET_NEXT_LINE
 # define GET_NEXT_LINE
-# include <unistd.h>
 # include <stdio.h>
+# include <unistd.h>
+# include <stdlib.h>
+
 char	*get_next_line(int fd);
+char	*set_all_str(int fd, char *buffer);
+char	*ft_strcat(char *dest, char const *src);
+char	*ft_strchr(char const *str, int c);
+void	ft_bzero(char *str, size_t size);
+size_t	ft_strlen(char const *str);
 
 #endif
