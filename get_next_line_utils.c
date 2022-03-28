@@ -6,81 +6,71 @@
 /*   By: pnimwata <pnimwata@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/06 21:10:46 by pnimwata          #+#    #+#             */
-/*   Updated: 2022/03/21 16:19:08 by pnimwata         ###   ########.fr       */
+/*   Updated: 2022/03/28 13:34:49 by pnimwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_strnew(size_t num)
+char	*ft_strcat(char *dest, char const *src)
 {
-	char	*str;
-	
-	str = (char *)ft_calloc(num + 1, sizeof (char));
-	if (!str)
-		return (0);
-	return (str);
-}
-
-void	*ft_calloc(size_t count, size_t size)
-{
-	void	*mem;
-
-	mem = malloc(count * size);
-	if (!mem)
-		return (0);
-	ft_bzero(mem, count * size);
-	return (mem);
-}
-
-void	ft_bzero(void *s, size_t size)
-{
-	char	*str;
+	size_t	len;
+	char	*temp;
 	size_t	i;
-	
+
+	len = ft_strlen(dest) + ft_strlen(src);
+	temp = (char *)malloc((len + 1) * 1);
+	if (!temp)
+		return (0);
 	i = 0;
-	str = (char *)s;
+	while (*(dest + i))
+	{
+		*(temp + i) = *(dest + i);
+		i++;
+	}
+	while (*src)
+	{
+		*(temp + i) = *src;
+		src++;
+		i++;
+	}
+	*(temp + len) = 0;
+	free(dest);
+	dest = temp;
+	return (dest);
+}
+
+char	*ft_strchr(char const *str, int c)
+{
+	size_t	i;
+
+	i = 0;
+	while (*(str + i))
+	{
+		if (*(str + i) == (char)c)
+			return ((char *)(str + i));
+		i++;
+	}
+	return (0);
+}
+
+void	ft_bzero(char *str, size_t size)
+{
+	size_t	i;
+
+	i = 0;
 	while (i < size)
 	{
-		*(str + i) = 0;
+		*str = 0;
 		i++;
+		str++;
 	}
-}
-
-char	*ft_strjoin(char const *s1, char const *s2)
-{
-	char	*new_s;
-	size_t	i;
-	size_t	j;
-	size_t	size;
-
-	size = ft_strlen(s1) + ft_strlen(s2);
-	new_s = (char *)ft_calloc (size + 1, sizeof (char));
-	if (!new_s)
-		return (0);
-	i = 0;
-	j = 0;
-	while (*(s1 + j) != '\0')
-	{
-		*(new_s + i) = *(s1 + j);
-		i++;
-		j++;
-	}
-	j = 0;
-	while (*(s2 + j) != '\0')
-	{
-		*(new_s + i) = *(s2 + j);
-		i++;
-		j++;
-	}
-	*(new_s + i) = '\0';
-	return (new_s);
 }
 
 size_t	ft_strlen(char const *str)
 {
 	size_t	count;
-	
+
 	count = 0;
 	while (*str)
 	{
