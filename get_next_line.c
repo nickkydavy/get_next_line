@@ -12,15 +12,18 @@
 
 #include "get_next_line.h"
 
-char	*set_all_str(int fd, char *buffer)
+char	*add_str(int fd, char *buffer)
 {
 	char	*str;
+	char	*p_nl;
 	int		i;
 
 	str = (char *)malloc(1 * sizeof (char));
 	while ((i = read(fd, buffer, BUFFER_SIZE)) > 0)
 	{
 		buffer[i] = 0;
+		if ((p_nl = ft_strchr(buffer, '\n')) != 0)
+			*(p_nl + 1) = 0;
 		if (!(str = ft_strcat(str, buffer)))
 			return (0);
 	}
@@ -83,18 +86,16 @@ char	*get_next_line(int fd)
 	static char	*next_line;
 	char		buffer[BUFFER_SIZE + 1];
 	char		*temp;
-	size_t		i;
+	// size_t		i;
 
-	if (!fd || !(BUFFER_SIZE > 0))
+	printf("passthis");
+	next_line = 0;
+	if (!fd || !(BUFFER_SIZE > 0) || *next_line == 0)
 		return (0);
-	if (!all_str_fd)
-	{
-		all_str_fd = set_all_str(fd, buffer);
+	all_str_fd = add_str(fd, buffer);
+	if (!next_line)
 		next_line = all_str_fd;
-	}
-	next_line = ft_strchr(next_line, '\n') + 1;
 	temp = set_line(all_str_fd, next_line);
-	all_str_fd = next_line;
-	printf("%s", all_str_fd);
+	next_line = (all_str_fd + ft_strlen(all_str_fd));
 	return (temp);
 }
