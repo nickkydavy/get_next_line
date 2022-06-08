@@ -6,7 +6,7 @@
 /*   By: pnimwata <pnimwata@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/06 21:09:45 by pnimwata          #+#    #+#             */
-/*   Updated: 2022/03/28 13:32:58 by pnimwata         ###   ########.fr       */
+/*   Updated: 2022/06/07 12:17:34 by pnimwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ char	*add_str(int fd, char *buffer)
 	int		i;
 
 	str = (char *)malloc(1 * sizeof (char));
+	if (!str)
+		return (0);
 	while ((i = read(fd, buffer, BUFFER_SIZE)) > 0)
 	{
 		buffer[i] = 0;
@@ -88,9 +90,8 @@ char	*get_next_line(int fd)
 	char		*temp;
 	// size_t		i;
 
-	printf("passthis");
 	next_line = 0;
-	if (!fd || !(BUFFER_SIZE > 0) || *next_line == 0)
+	if (!fd || !(BUFFER_SIZE > 0) )
 		return (0);
 	all_str_fd = add_str(fd, buffer);
 	if (!next_line)
