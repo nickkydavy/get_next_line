@@ -6,38 +6,32 @@
 /*   By: pnimwata <pnimwata@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/06 21:10:46 by pnimwata          #+#    #+#             */
-/*   Updated: 2022/03/28 13:34:49 by pnimwata         ###   ########.fr       */
+/*   Updated: 2022/07/20 14:57:40 by pnimwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_strcat(char *dest, char const *src)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	size_t	len;
-	char	*temp;
+	char	*join;
+	size_t	str_diff;
 	size_t	i;
+	size_t	count;
 
-	len = ft_strlen(dest) + ft_strlen(src);
-	temp = (char *)malloc((len + 1) * 1);
-	if (!temp)
+	str_diff = ft_strlen(s1) + ft_strlen(s2);
+	join = (char *)malloc((sizeof(char)) * (str_diff + 1));
+	if (!join || !s1 || !s2)
 		return (0);
+	count = 0;
 	i = 0;
-	while (*(dest + i))
-	{
-		*(temp + i) = *(dest + i);
-		i++;
-	}
-	while (*src)
-	{
-		*(temp + i) = *src;
-		src++;
-		i++;
-	}
-	*(temp + len) = 0;
-	free(dest);
-	dest = temp;
-	return (dest);
+	while (s1[count])
+		join[i++] = s1[count++];
+	count = 0;
+	while (s2[count])
+		join[i++] = s2[count++];
+	join[i] = '\0';
+	return (join);
 }
 
 char	*ft_strchr(char const *str, int c)
@@ -54,17 +48,21 @@ char	*ft_strchr(char const *str, int c)
 	return (0);
 }
 
-void	ft_bzero(char *str, size_t size)
+void	*ft_calloc(size_t n, size_t size)
 {
-	size_t	i;
+	char	*pointer;
+	size_t	count;
 
-	i = 0;
-	while (i < size)
+	pointer = malloc(n * size);
+	if (!pointer)
+		return (0);
+	count = 0;
+	while (count < (n * size))
 	{
-		*str = 0;
-		i++;
-		str++;
+		pointer[count] = 0;
+		count++;
 	}
+	return ((void *)pointer);
 }
 
 size_t	ft_strlen(char const *str)

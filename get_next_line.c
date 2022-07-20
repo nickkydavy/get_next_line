@@ -6,97 +6,104 @@
 /*   By: pnimwata <pnimwata@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/06 21:09:45 by pnimwata          #+#    #+#             */
-/*   Updated: 2022/06/07 12:17:34 by pnimwata         ###   ########.fr       */
+/*   Updated: 2022/07/20 15:18:28 by pnimwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*add_str(int fd, char *buffer)
+char	*join_buffer(char *base, char *src)
 {
-	char	*str;
-	char	*p_nl;
-	int		i;
+	char	*join;
 
-	str = (char *)malloc(1 * sizeof (char));
-	if (!str)
-		return (0);
-	while ((i = read(fd, buffer, BUFFER_SIZE)) > 0)
-	{
-		buffer[i] = 0;
-		if ((p_nl = ft_strchr(buffer, '\n')) != 0)
-			*(p_nl + 1) = 0;
-		if (!(str = ft_strcat(str, buffer)))
-			return (0);
-	}
-	return (str);
+	join = ft_strjoin(base, src);
+	free(base);
+	return (join);
 }
 
-char	*set_line(char *str, char *pstr)
+char	*set_read_file(int fd, char *buffer)
 {
-	// char	*temp;
-	// char	*substr;
-	// size_t	i;
+	int	nbyte;
+	char	*sub_buffer;
 	
-	// temp = (char *)malloc(1 * sizeof (char));
-	// substr = (char *)malloc(2 * sizeof (char));
-	// if (!temp)
-	// 	return (0);
-	// i = 0;
-	// while (*str)
-	// {
-	// 	*substr = *str;
-	// 	*(substr + 1) = 0;
-	// 	if (!(temp = ft_strcat(temp, substr)))
-	// 		return (0);
-	// 	pstr = str;
-	// 	str++;
-	// 	if (*str == '\n')
-	// 	{
-	// 		*substr = '\n';
-	// 		*(substr + 1) = 0;
-	// 		if (!(temp = ft_strcat(temp, substr)))
-	// 			return (0);
-	// 		break ;
-	// 	}
-	// }
-	// free(substr);
-	char	*temp;
-	size_t	len;
-	size_t	i;
-
-	if (!pstr)
+	if (!buffer)
+		buffer = ft_calloc(1, 1);
+	sub_buffer = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
+	if (!sub_buffer)
 		return (0);
-	len = ft_strlen(str) - ft_strlen(pstr);
-	temp = (char *)malloc((len + 1) * sizeof (char));
-	if (!temp)
-		return (0);
-	i = 0;
-	while (*str && str != pstr)
+	nbyte = 1;
+	int	i = 0;
+	while (nbyte > 0 && !ft_strchr(buffer, '\n'))
 	{
-		*(temp + i) = *str;
-		str++;
+		nbyte = read(fd,sub_buffer, BUFFER_SIZE);
+		if (nbyte == -1)
+		{
+			free(sub_buffer);
+			return (0);
+		}
+		sub_buffer[nbyte] = '\0';
+		buffer = join_buffer(buffer, sub_buffer);
 		i++;
 	}
-	*(temp + i) = 0;
-	return (temp);
+	free(sub_buffer);
+	return (buffer);
+}
+
+char	*set_output(char *buffer)
+{
+	int	count;
+	int	i;
+	char	*line;
+	
+	if (!buffer)
+		return (0);
+	i = 0;
+	count = 0;
+	while (buffer[count] && buffer[count] != '\n')
+		count++;
+	line = ft_calloc(count + 2, sizeof(char));
+	while (i < count)
+	{
+		line[i] = buffer[i];
+		i++;
+	}
+	if (buffer[i] && buffer[i] == '\n')
+		line[i] = '\n';
+	return (line);
+}
+
+char	*set_next_line(char *buffer)
+{
+	int	count;
+	int	i;
+	char	*next_line;
+	size_t	len_next;
+
+	count = 0;
+	if (!buffer[count])
+		return (0);
+	while (buffer[count] && buffer[count] != '\n')
+		count++;
+	len_next = ft_strlen(buffer) - count;
+	next_line = ft_calloc(len_next + 1, sizeof(char));
+	i = 0;
+	while (buffer[count])
+		next_line[i++] = buffer[++count];
+	free(buffer);
+	return (next_line);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*all_str_fd;
-	static char	*next_line;
-	char		buffer[BUFFER_SIZE + 1];
-	char		*temp;
-	// size_t		i;
+	static char	*read_file;
+	char		*text_output;
 
-	next_line = 0;
-	if (!fd || !(BUFFER_SIZE > 0) )
+	if (fd < 0 || !(BUFFER_SIZE > 0) || read(fd, 0, 0) < 0)
 		return (0);
-	all_str_fd = add_str(fd, buffer);
-	if (!next_line)
-		next_line = all_str_fd;
-	temp = set_line(all_str_fd, next_line);
-	next_line = (all_str_fd + ft_strlen(all_str_fd));
-	return (temp);
+	read_file = set_read_file(fd, read_file);
+	if (!read_file || *read_file == 0)
+		return (0);
+	text_output = set_output(read_file);
+	read_file = set_next_line(read_file);
+	return (text_output);
 }
