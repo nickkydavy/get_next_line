@@ -6,7 +6,7 @@
 /*   By: pnimwata <pnimwata@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/06 21:09:45 by pnimwata          #+#    #+#             */
-/*   Updated: 2022/07/20 18:52:55 by pnimwata         ###   ########.fr       */
+/*   Updated: 2022/07/20 22:26:17 by pnimwata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ char	*set_read_file(int fd, char *buffer)
 	while (nbyte > 0 && !ft_strchr(buffer, '\n'))
 	{
 		nbyte = read(fd, sub_buffer, BUFFER_SIZE);
-		if (nbyte == -1)
+	//	printf("%s  %d\n",sub_buffer,  nbyte);
+		if (nbyte < 0 || ft_strlen(sub_buffer) < 1)
 		{
 			free(sub_buffer);
 			free(buffer);
@@ -63,7 +64,10 @@ char	*set_output(char *buffer)
 	count = 0;
 	while (buffer[count] && buffer[count] != '\n')
 		count++;
-	line = ft_calloc(count + 2, sizeof(char));
+	if (buffer[count] == '\0')
+		line = ft_calloc(count + 1, sizeof(char));
+	else
+		line = ft_calloc(count + 2, sizeof(char));
 	while (i < count)
 	{
 		line[i] = buffer[i];
@@ -103,12 +107,23 @@ char	*get_next_line(int fd)
 	static char	*read_file;
 	char		*text_output;
 
-	if (fd < 0 || !(BUFFER_SIZE > 0) || read(fd, 0, 0) < 0)
+	if (fd < 0 || !(BUFFER_SIZE > 0) || read(fd, 0, 0) == -1)
 		return (0);
 	read_file = set_read_file(fd, read_file);
 	if (!read_file || *read_file == 0)
+	{
+	//	printf("2passthis\n");
+		if (read_file)
+			free(read_file);
 		return (0);
+	}
 	text_output = set_output(read_file);
+	if (!text_output)
+	{
+		//printf("3passthis\n");
+		free(read_file);
+		return (0);
+	}
 	read_file = set_next_line(read_file);
 	return (text_output);
 }
